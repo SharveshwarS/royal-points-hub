@@ -123,7 +123,7 @@ const SignupPage = () => {
                 <Label htmlFor="name">Full Name</Label>
                 <Input
                   id="name"
-                  placeholder="John Doe"
+                  placeholder="Enter your Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -134,7 +134,7 @@ const SignupPage = () => {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@company.com"
+                  placeholder="Enter your mail id"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
