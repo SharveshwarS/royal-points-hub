@@ -1,5 +1,3 @@
-
-
 import { Role, User } from "@/types";
 import { createContext, ReactNode, useContext, useState } from "react";
 
@@ -47,23 +45,23 @@ const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<User | null>(() => {
-  const stored = localStorage.getItem("user");
-  return stored ? JSON.parse(stored) : null;
-});
+
+  // ❌ Removed localStorage loading
+  const [user, setUser] = useState<User | null>(null);
 
   const login = (user: User): boolean => {
-   const loggedUser = {
-  id: user.id,
-  name: user.name,
-  email: user.email,
-  role: user.role,
-  department: user.department,
-  employeeId: user.employeeId,
-};
+    const loggedUser = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      department: user.department,
+      employeeId: user.employeeId,
+    };
 
-setUser(loggedUser);
-localStorage.setItem("user", JSON.stringify(loggedUser));
+    setUser(loggedUser);
+
+    // ❌ Removed localStorage
     return true;
   };
 
@@ -100,4 +98,3 @@ export function useAuth() {
 
   return context;
 }
-
