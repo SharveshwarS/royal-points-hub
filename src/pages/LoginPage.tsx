@@ -66,11 +66,11 @@ const LoginPage = () => {
         });
 
         // ROLE BASED REDIRECT
-        if (user.role === "ADMIN") {
-          navigate("/admin-dashboard");
-        } else {
-          navigate("/employee-dashboard");
-        }
+        // if (user.role === "ADMIN") {
+        //   navigate("/admin-dashboard");
+        // } else {
+        //   navigate("/employee-dashboard");
+        // }
 
       } else {
 
