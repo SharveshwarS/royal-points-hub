@@ -4,20 +4,31 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.vigor.points.entity.User;
 import com.vigor.points.entity.PointsTransaction;
+import com.vigor.points.repository.UserRepository;
 import com.vigor.points.repository.PointsTransactionRepository;
 
 @Service
 public class PointsService {
 
     private final PointsTransactionRepository repo;
+    private final UserRepository userRepository;
 
-    public PointsService(PointsTransactionRepository repo) {
+    public PointsService(PointsTransactionRepository repo,UserRepository userRepository) {
         this.repo = repo;
+        this.userRepository = userRepository;
     }
+
 
     // ADD POINTS
     public PointsTransaction addPoints(Long userId, int points, String reason) {
+
+         User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setPoints(user.getPoints() + points);
+        userRepository.save(user);
 
         PointsTransaction transaction = new PointsTransaction();
         transaction.setUserId(userId);
@@ -30,6 +41,12 @@ public class PointsService {
 
     // REMOVE POINTS
     public PointsTransaction deductPoints(Long userId, int points, String reason) {
+
+           User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+            user.setPoints(user.getPoints() - points);
+            userRepository.save(user);
 
         PointsTransaction transaction = new PointsTransaction();
         transaction.setUserId(userId);

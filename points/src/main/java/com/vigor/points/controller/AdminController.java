@@ -8,36 +8,37 @@ import com.vigor.points.entity.User;
 import com.vigor.points.service.UserService;
 import com.vigor.points.entity.PointsTransaction;
 import com.vigor.points.service.PointsService;
+import com.vigor.points.dto.PointsRequest;
 
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/admin")
 @CrossOrigin(origins = "*")
 public class AdminController {
 
     private final UserService userService;
     private final PointsService pointsService;
 
-    public AdminController(UserService userService,PointsService pointsService) {
+    public AdminController(UserService userService, PointsService pointsService) {
         this.userService = userService;
         this.pointsService = pointsService;
     }
 
-        @PostMapping("/add-points")
-    public PointsTransaction addPoints(
-            @RequestParam Long userId,
-            @RequestParam int points,
-            @RequestParam String reason) {
+    @PostMapping("/add-points")
+    public PointsTransaction addPoints(@RequestBody PointsRequest request) {
 
-        return pointsService.addPoints(userId, points, reason);
+        return pointsService.addPoints(
+                request.getUserId(),
+                request.getPoints(),
+                request.getReason());
     }
 
     @PostMapping("/deduct-points")
-    public PointsTransaction deductPoints(
-            @RequestParam Long userId,
-            @RequestParam int points,
-            @RequestParam String reason) {
+    public PointsTransaction deductPoints(@RequestBody PointsRequest request) {
 
-        return pointsService.deductPoints(userId, points, reason);
+        return pointsService.deductPoints(
+                request.getUserId(),
+                request.getPoints(),
+                request.getReason());
     }
 
     @GetMapping("/transactions")
@@ -54,4 +55,10 @@ public class AdminController {
     public List<User> getUsers() {
         return userService.getAllUsers();
     }
+
+    @GetMapping("/total-points/{userId}")
+    public int getTotalPoints(@PathVariable Long userId) {
+    User user = userService.getUserById(userId);
+    return user.getPoints();
+}
 }

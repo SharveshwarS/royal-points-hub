@@ -17,11 +17,17 @@ public class UserService {
     public User registerUser(User user) {
         return userRepository.save(user);
     }
-    
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
-    
+
+    public User getUserById(Long userId) {
+
+    return userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+}
+
     public User loginUser(String email, String password) {
 
     User user = userRepository.findByEmail(email)

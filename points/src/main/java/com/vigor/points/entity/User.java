@@ -24,6 +24,8 @@ public class User {
 
     private String role;
 
+    private int points;
+
     public User() {}
 
     public Long getId() {
@@ -61,4 +63,12 @@ public class User {
     public void setRole(String role) {
         this.role = role;
     }
+
+    public int getPoints() {
+    return points;
+}
+
+public void setPoints(int points) {
+    this.points = points;
+}
 }
