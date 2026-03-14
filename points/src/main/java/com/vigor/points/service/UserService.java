@@ -1,5 +1,5 @@
 package com.vigor.points.service;
-
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.vigor.points.entity.User;
@@ -18,6 +18,10 @@ public class UserService {
         return userRepository.save(user);
     }
     
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+    
     public User loginUser(String email, String password) {
 
     User user = userRepository.findByEmail(email)
@@ -28,5 +32,7 @@ public class UserService {
     }
 
     return user;
+
+    
 }
 }
