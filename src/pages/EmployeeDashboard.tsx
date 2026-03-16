@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { Award, Building, Hash, Mail, User } from "lucide-react";
+import { useEffect, useState } from "react";
 
 const API = "http://localhost:8080/api/admin";
 
@@ -110,9 +110,9 @@ const EmployeeDashboard = () => {
               {points !== null ? points : "..."}
             </p>
 
-            <p className="text-sm text-muted-foreground mt-2">
-              Points loaded from backend
-            </p>
+            {/* <p className="text-sm text-muted-foreground mt-2">
+              
+            </p> */}
 
           </CardContent>
         </Card>
