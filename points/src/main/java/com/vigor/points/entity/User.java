@@ -24,6 +24,8 @@ public class User {
 
     private String role;
 
+    private String department;
+
     private int points;
 
     public User() {}
@@ -71,4 +73,14 @@ public class User {
 public void setPoints(int points) {
     this.points = points;
 }
+
+    public String getDepartment() {
+    return department;
+}
+
+public void setDepartment(String department) {
+    this.department = department;
+}
+
+
 }

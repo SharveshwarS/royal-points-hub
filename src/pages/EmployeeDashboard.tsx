@@ -1,9 +1,34 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { Award, Building, Hash, Mail, User } from "lucide-react";
 
+const API = "http://localhost:8080/api/admin";
+
 const EmployeeDashboard = () => {
   const { user } = useAuth();
+  const [points, setPoints] = useState<number | null>(null);
+
+  const getUserPoints = async (userId: number) => {
+    const res = await fetch(`${API}/total-points/${userId}`);
+    const data = await res.json(); // backend returns just number
+    return data;
+  };
+
+  useEffect(() => {
+    if (user) {
+      loadPoints();
+    }
+  }, [user]);
+
+  const loadPoints = async () => {
+    try {
+      const data = await getUserPoints(Number(user?.id));
+      setPoints(data); // <-- directly set number
+    } catch (error) {
+      console.error("Failed to load points");
+    }
+  };
 
   if (!user) {
     return <div className="p-6">Loading...</div>;
@@ -44,7 +69,7 @@ const EmployeeDashboard = () => {
                 <Hash className="w-4 h-4 text-muted-foreground" />
                 <span className="text-muted-foreground">ID:</span>
                 <span className="text-foreground font-medium ml-auto">
-                  {user.employeeId}
+                  {user.id}
                 </span>
               </div>
 
@@ -82,11 +107,11 @@ const EmployeeDashboard = () => {
             </p>
 
             <p className="text-5xl font-bold text-foreground">
-              0
+              {points !== null ? points : "..."}
             </p>
 
             <p className="text-sm text-muted-foreground mt-2">
-              Points will load from backend
+              Points loaded from backend
             </p>
 
           </CardContent>
