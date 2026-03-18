@@ -47,7 +47,7 @@ const PointsHistoryTable = ({ entries, pageSize = 5 }: Props) => {
               <TableHead className="cursor-pointer select-none" onClick={() => toggleSort("date")}>
                 <span className="flex items-center gap-1">Date <ArrowUpDown className="w-3 h-3" /></span>
               </TableHead>
-              <TableHead>Event / Reason</TableHead>
+              <TableHead>Reason</TableHead>
               <TableHead>Pointed By</TableHead>
               <TableHead className="cursor-pointer select-none text-right" onClick={() => toggleSort("pointsAdded")}>
                 <span className="flex items-center justify-end gap-1">Added <ArrowUpDown className="w-3 h-3" /></span>
@@ -62,8 +62,8 @@ const PointsHistoryTable = ({ entries, pageSize = 5 }: Props) => {
             {paged.map((entry) => (
               <TableRow key={entry.id}>
                 <TableCell className="text-sm">{entry.date}</TableCell>
-                <TableCell className="text-sm font-medium">{entry.event}</TableCell>
-                <TableCell className="text-sm">{entry.pointedBy}</TableCell>
+                <TableCell className="text-sm font-medium">{entry.reason}</TableCell>
+                <TableCell className="text-sm">{"Admin"}</TableCell>
                 <TableCell className="text-right text-sm">
                   {entry.pointsAdded > 0 ? (
                     <span className="text-success font-medium">+{entry.pointsAdded}</span>

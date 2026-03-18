@@ -34,6 +34,7 @@ const AdminPoints = () => {
   const [pointsAdded, setPointsAdded] = useState("");
   const [pointsRemoved, setPointsRemoved] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
+   const [totalPoints, setTotalPoints] = useState<number>(0);
 
   /* ---------------- API CALLS ---------------- */
 
@@ -58,6 +59,11 @@ const AdminPoints = () => {
     return res.json();
   };
 
+  const getTotalPoints = async (userId: number) => {
+  const res = await fetch(`${API}/total-points/${userId}`);
+  return res.json();
+};
+
   const deductPoints = async (data: any) => {
     const res = await fetch(`${API}/deduct-points`, {
       method: "POST",
@@ -80,22 +86,54 @@ const AdminPoints = () => {
     setEmployees(data);
   };
 
-  const loadHistory = async (userId: number) => {
-    const data = await getUserTransactions(userId);
-    setHistory(data);
-  };
+const loadHistory = async (userId: number) => {
+
+  const data = await getUserTransactions(userId);
+  const total = await getTotalPoints(userId);
+
+  setTotalPoints(total);
+
+  // Step 1: format normally
+  const formatted = data.map((item: any) => ({
+    id: item.id,
+    employeeId: String(item.userId),
+    date: item.createdAt,
+    reason: item.reason,
+    pointsAdded: item.type === "ADD" ? item.points : 0,
+    pointsRemoved: item.type === "DEDUCT" ? item.points : 0,
+  }));
+
+  // Step 2: sort latest first
+  const reversed = formatted.reverse();
+
+  // Step 3: calculate remaining backwards
+  let running = total;
+
+  const withBalance = reversed.map((item: any) => {
+    const current = running;
+
+    running =
+      running - item.pointsAdded + item.pointsRemoved;
+
+    return {
+      ...item,
+      remainingPoints: current,
+    };
+  });
+
+  setHistory(withBalance);
+};
+
+ 
 
   /* ---------------- LOGIC ---------------- */
 
   const employee = employees.find((e) => String(e.id) === selectedEmployee);
 
-  const currentTotal =
-    history.length > 0
-      ? history[0].remainingPoints
-      : employee?.totalPoints || 0;
+  const currentTotal = totalPoints;
 
   const newRemaining =
-    currentTotal + (Number(pointsAdded) || 0) - (Number(pointsRemoved) || 0);
+  totalPoints + (Number(pointsAdded) || 0) - (Number(pointsRemoved) || 0);
 
   const handleSubmit = () => {
     if (!selectedEmployee || !event.trim()) {
@@ -200,7 +238,7 @@ const AdminPoints = () => {
                 <SelectContent>
                   {employees.map((emp) => (
                     <SelectItem key={emp.id} value={String(emp.id)}>
-                      {emp.name} ({emp.employeeId})
+                      {emp.name} - {emp.id}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -218,7 +256,7 @@ const AdminPoints = () => {
             </div>
 
             <div className="space-y-2 md:col-span-2">
-              <Label>Event / Reason</Label>
+              <Label>Reason</Label>
               <Input
                 value={event}
                 onChange={(e) => setEvent(e.target.value)}

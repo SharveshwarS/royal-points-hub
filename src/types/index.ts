@@ -20,7 +20,7 @@ export interface PointEntry {
   id: string;
   employeeId: string;
   date: string;
-  event: string;
+  reason: string;
   pointedBy: string;
   pointsAdded: number;
   pointsRemoved: number;
