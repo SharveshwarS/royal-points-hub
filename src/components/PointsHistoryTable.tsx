@@ -55,7 +55,7 @@ const PointsHistoryTable = ({ entries, pageSize = 5 }: Props) => {
               <TableHead className="cursor-pointer select-none text-right" onClick={() => toggleSort("pointsRemoved")}>
                 <span className="flex items-center justify-end gap-1">Removed <ArrowUpDown className="w-3 h-3" /></span>
               </TableHead>
-              <TableHead className="text-right">Remaining</TableHead>
+              <TableHead className="text-right">Total Points</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

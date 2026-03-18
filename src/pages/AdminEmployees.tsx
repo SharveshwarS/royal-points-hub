@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { mockEmployees as initialEmployees } from "@/data/mockData";
+import { useEffect } from "react";
+//import { mockEmployees as initialEmployees } from "@/data/mockData";
 import { Employee } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -11,8 +12,9 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Search, Plus, Pencil, Trash2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
+
 const AdminEmployees = () => {
-  const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
+  const [employees, setEmployees] = useState<Employee[]>([]);
   const [search, setSearch] = useState("");
   const [editOpen, setEditOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -28,9 +30,36 @@ const AdminEmployees = () => {
       e.employeeId.toLowerCase().includes(search.toLowerCase())
   );
 
+  useEffect(() => {
+  fetchUsers();
+}, []);
+
+const fetchUsers = async () => {
+  try {
+    const res = await fetch("http://localhost:8080/api/admin/users");
+    if (!res.ok) throw new Error("API error");
+
+    const users = await res.json();
+
+    setEmployees(
+      users.map((u: any, i: number) => ({
+        id: String(u.id),
+        name: u.name,
+        email: u.email,
+        department: u.department,
+        //employeeId: `EMP-${String(i + 1).padStart(3, "0")}`,
+        employeeId: 'EMP - '+String(u.id).padStart(3,"0"),
+        totalPoints: u.points ?? 0, // safer
+      }))
+    );
+  } catch (err) {
+    console.error("Fetch error:", err);
+  }
+};
+
   const openAdd = () => {
     setIsNew(true);
-    setForm({ name: "", email: "", department: "", employeeId: `EMP-${String(employees.length + 1).padStart(3, "0")}` });
+    setForm({ name: "", email: "", department: "", employeeId: "" });
     setEditOpen(true);
   };
 

@@ -8,6 +8,7 @@ import com.vigor.points.entity.User;
 import com.vigor.points.entity.PointsTransaction;
 import com.vigor.points.repository.UserRepository;
 import com.vigor.points.repository.PointsTransactionRepository;
+import org.springframework.data.domain.Sort;
 
 @Service
 public class PointsService {
@@ -63,7 +64,10 @@ public class PointsService {
     }
 
     // GET ALL TRANSACTIONS
+    // public List<PointsTransaction> getAllTransactions() {
+    //     return repo.findAll();
+    // }
     public List<PointsTransaction> getAllTransactions() {
-        return repo.findAll();
-    }
+    return repo.findAll(Sort.by(Sort.Direction.DESC, "id"));
+}
 }

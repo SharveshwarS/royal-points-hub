@@ -30,20 +30,63 @@ const EmployeeDashboard = () => {
     }
   }, [user]);
 
-  const loadPoints = async () => {
-    try {
-      const data = await getUserPoints(Number(user?.id));
+ const loadPoints = async () => {
+  try {
+    const data = await getUserPoints(Number(user?.id));
+    
+    console.log("POINTS API RESPONSE:", data); // 👈 ADD THIS
+
+    if (typeof data === "number") {
       setPoints(data);
-    } catch (error) {
-      console.error("Failed to load points");
+    } else if (data.totalPoints !== undefined) {
+      setPoints(data.totalPoints);
+    } else {
+      setPoints(0);
     }
-  };
+
+  } catch (error) {
+    console.error("Failed to load points", error);
+  }
+};
 
   const loadHistory = async () => {
     setLoadingHistory(true);
     try {
-      const data = await getUserTransactions(Number(user?.id));
-      setHistory(data);
+const data = await getUserTransactions(Number(user?.id));
+const total = await getUserPoints(Number(user?.id));
+
+// Step 1: format
+const formatted = data.map((item: any) => ({
+  id: item.id,
+  employeeId: String(item.userId),
+  date: new Date(item.createdAt).toLocaleString(),
+  reason: item.reason,
+  pointsAdded: item.type === "ADD" ? item.points : 0,
+  pointsRemoved:
+    item.type === "REMOVE" || item.type === "DEDUCT"
+      ? item.points
+      : 0,
+}));
+
+// Step 2: latest first
+const reversed = formatted.reverse();
+
+// Step 3: running balance
+let running = typeof total === "number" ? total : total.totalPoints;
+
+const withBalance = reversed.map((item: any) => {
+  const current = running;
+
+  running = running - item.pointsAdded + item.pointsRemoved;
+
+  return {
+    ...item,
+    remainingPoints: current,
+  };
+});
+
+setHistory(withBalance);
+
     } catch (error) {
       console.error("Failed to load history");
     } finally {

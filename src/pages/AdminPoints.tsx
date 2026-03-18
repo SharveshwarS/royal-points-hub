@@ -97,7 +97,7 @@ const loadHistory = async (userId: number) => {
   const formatted = data.map((item: any) => ({
     id: item.id,
     employeeId: String(item.userId),
-    date: item.createdAt,
+    date: new Date(item.createdAt).toLocaleString(),
     reason: item.reason,
     pointsAdded: item.type === "ADD" ? item.points : 0,
     pointsRemoved: item.type === "DEDUCT" ? item.points : 0,
