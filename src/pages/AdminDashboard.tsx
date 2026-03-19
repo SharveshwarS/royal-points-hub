@@ -87,11 +87,13 @@ const recentActivity = transactions.slice(0,5);
             <div className="space-y-3">
               {recentActivity.map((entry) => {
                 const emp = employees.find((e: any) => e.id === entry.userId);
+                //const emp = entry.user;
                 return (
                   <div key={entry.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
                     <div>
                       <p className="text-sm font-medium text-foreground">{entry.reason}</p>
                       <p className="text-xs text-muted-foreground">{emp?.name} · {`EMP-${String(entry.userId).padStart(3, "0")}`}</p>
+                      
                     </div>
                     <div className="text-sm font-medium">
                      {entry.type === "ADD" && (<span className="text-success">+{entry.points}</span>)}

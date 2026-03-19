@@ -2,9 +2,11 @@ package com.vigor.points.entity;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class PointsTransaction {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,6 +19,11 @@ public class PointsTransaction {
     private String type; // ADD or DEDUCT
 
     private String reason;
+
+    // @ManyToOne
+    // @JoinColumn(name = "user_id")
+    // @JsonBackReference
+    // private User user;
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -39,4 +46,7 @@ public class PointsTransaction {
     public void setReason(String reason) { this.reason = reason; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
+
+    //public User getUser() { return user; }
+   // public void setUser(User user) { this.user = user; }
 }

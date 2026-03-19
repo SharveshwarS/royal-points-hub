@@ -61,4 +61,12 @@ public class AdminController {
     User user = userService.getUserById(userId);
     return user.getPoints();
 }
+
+@DeleteMapping("/userTra/{userId}")
+    public String deleteTransactions(@PathVariable Long userId) {
+
+        pointsService.deleteTransactionsByUserId(userId);
+
+        return "All transactions deleted for userId: " + userId;
+    }
 }

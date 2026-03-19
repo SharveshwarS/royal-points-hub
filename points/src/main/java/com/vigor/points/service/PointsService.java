@@ -9,6 +9,7 @@ import com.vigor.points.entity.PointsTransaction;
 import com.vigor.points.repository.UserRepository;
 import com.vigor.points.repository.PointsTransactionRepository;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PointsService {
@@ -33,6 +34,7 @@ public class PointsService {
 
         PointsTransaction transaction = new PointsTransaction();
         transaction.setUserId(userId);
+        //transaction.setUser(user);
         transaction.setPoints(points);
         transaction.setType("ADD");
         transaction.setReason(reason);
@@ -50,7 +52,8 @@ public class PointsService {
             userRepository.save(user);
 
         PointsTransaction transaction = new PointsTransaction();
-        transaction.setUserId(userId);
+       transaction.setUserId(userId);
+       //transaction.setUser(user);
         transaction.setPoints(points);
         transaction.setType("DEDUCT");
         transaction.setReason(reason);
@@ -70,4 +73,10 @@ public class PointsService {
     public List<PointsTransaction> getAllTransactions() {
     return repo.findAll(Sort.by(Sort.Direction.DESC, "id"));
 }
+@Transactional
+public void deleteTransactionsByUserId(Long userId) {
+    repo.deleteTransactionsByUserId(userId); // or deleteByUserId(userId)
 }
+ 
+}
+

@@ -75,29 +75,106 @@ const fetchUsers = async () => {
     setDeleteOpen(true);
   };
 
-  const handleSave = () => {
-    if (!form.name.trim() || !form.email.trim()) {
-      toast({ title: "Error", description: "Name and email are required.", variant: "destructive" });
-      return;
-    }
-    if (isNew) {
-      const newEmp: Employee = { id: String(Date.now()), ...form, totalPoints: 0 };
-      setEmployees([...employees, newEmp]);
-      toast({ title: "Employee Added", description: `${form.name} has been added.` });
-    } else if (selected) {
-      setEmployees(employees.map((e) => (e.id === selected.id ? { ...e, ...form } : e)));
-      toast({ title: "Employee Updated", description: `${form.name} has been updated.` });
-    }
-    setEditOpen(false);
-  };
+  // const handleSave = () => {
+  //   if (!form.name.trim() || !form.email.trim()) {
+  //     toast({ title: "Error", description: "Name and email are required.", variant: "destructive" });
+  //     return;
+  //   }
+  //   if (isNew) {
+  //     const newEmp: Employee = { id: String(Date.now()), ...form, totalPoints: 0 };
+  //     setEmployees([...employees, newEmp]);
+  //     toast({ title: "Employee Added", description: `${form.name} has been added.` });
+  //   } else if (selected) {
+  //     setEmployees(employees.map((e) => (e.id === selected.id ? { ...e, ...form } : e)));
+  //     toast({ title: "Employee Updated", description: `${form.name} has been updated.` });
+  //   }
+  //   setEditOpen(false);
+  // };
 
-  const handleDelete = () => {
-    if (selected) {
-      setEmployees(employees.filter((e) => e.id !== selected.id));
-      toast({ title: "Employee Deleted", description: `${selected.name} has been removed.` });
+  const handleSave = async () => {
+  if (!form.name.trim() || !form.email.trim()) {
+    toast({
+      title: "Error",
+      description: "Name and email are required.",
+      variant: "destructive"
+    });
+    return;
+  }
+
+  try {
+    if (isNew) {
+      // OPTIONAL: if you want backend create API
+    } else if (selected) {
+      await fetch(`http://localhost:8080/api/auth/update_users/${selected.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          department: form.department
+        })
+      });
+
+      toast({
+        title: "Employee Updated",
+        description: `${form.name} updated successfully`
+      });
+
+      fetchUsers(); // 🔥 refresh data
     }
-    setDeleteOpen(false);
-  };
+
+    setEditOpen(false);
+
+  } catch (err) {
+    console.error(err);
+    toast({
+      title: "Error",
+      description: "Failed to update employee",
+      variant: "destructive"
+    });
+  }
+};
+
+  // const handleDelete = () => {
+  //   if (selected) {
+  //     setEmployees(employees.filter((e) => e.id !== selected.id));
+  //     toast({ title: "Employee Deleted", description: `${selected.name} has been removed.` });
+  //   }
+  //   setDeleteOpen(false);
+  // };
+
+  const handleDelete = async () => {
+  if (!selected) return;
+
+  try {
+    await fetch(`http://localhost:8080/api/auth/delete_users/${selected.id}`, {
+      method: "DELETE"
+    });
+    await fetch(`http://localhost:8080/api/admin/userTra/${selected.id}`, {
+      method: "DELETE"
+    });
+
+
+    toast({
+      title: "Employee Deleted",
+      description: `${selected.name} removed successfully`
+    });
+
+    fetchUsers(); // 🔥 refresh list
+
+  } catch (err) {
+    console.error(err);
+    toast({
+      title: "Error",
+      description: "Failed to delete employee",
+      variant: "destructive"
+    });
+  }
+
+  setDeleteOpen(false);
+};
 
   return (
     <div className="space-y-6 animate-fade-in">
