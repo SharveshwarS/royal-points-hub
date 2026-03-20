@@ -15,26 +15,123 @@ const EmployeeSettings = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleProfileUpdate = (e: React.FormEvent) => {
-    e.preventDefault();
-    toast({ title: "Profile Updated", description: "Your profile has been updated successfully." });
-  };
+ const handleProfileUpdate = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-  const handlePasswordChange = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      toast({ title: "Error", description: "Passwords do not match.", variant: "destructive" });
-      return;
+  if (!user) return;
+
+  try {
+
+    const response = await fetch(`http://localhost:8080/api/auth/update_users/${user.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+      }),
+    });
+
+    if (response.ok) {
+
+      const updatedUser = await response.json();
+
+      // update localStorage + AuthContext
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      toast({
+        title: "Profile Updated",
+        description: "Your profile has been updated successfully.",
+      });
+
+    } else {
+
+      toast({
+        title: "Update Failed",
+        description: "Could not update profile.",
+        variant: "destructive",
+      });
+
     }
-    if (newPassword.length < 6) {
-      toast({ title: "Error", description: "Password must be at least 6 characters.", variant: "destructive" });
-      return;
+
+  } catch (error) {
+
+    toast({
+      title: "Server Error",
+      description: "Backend not reachable.",
+      variant: "destructive",
+    });
+
+  }
+};
+
+  const handlePasswordChange = async (e: React.FormEvent) => {
+  e.preventDefault();
+
+  if (!user) return;
+
+  if (newPassword !== confirmPassword) {
+    toast({
+      title: "Error",
+      description: "Passwords do not match.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  if (newPassword.length < 6) {
+    toast({
+      title: "Error",
+      description: "Password must be at least 6 characters.",
+      variant: "destructive",
+    });
+    return;
+  }
+
+  try {
+
+    const response = await fetch(`http://localhost:8080/api/auth/update_users/${user.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        password: newPassword,
+      }),
+    });
+
+    if (response.ok) {
+
+      toast({
+        title: "Password Changed",
+        description: "Your password has been updated.",
+      });
+
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+
+    } else {
+
+      toast({
+        title: "Error",
+        description: "Password update failed.",
+        variant: "destructive",
+      });
+
     }
-    toast({ title: "Password Changed", description: "Your password has been updated." });
-    setCurrentPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-  };
+
+  } catch (error) {
+
+    toast({
+      title: "Server Error",
+      description: "Backend not reachable.",
+      variant: "destructive",
+    });
+
+  }
+};
 
   return (
     <div className="space-y-6 animate-fade-in max-w-2xl">

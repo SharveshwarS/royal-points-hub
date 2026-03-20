@@ -1,10 +1,11 @@
 package com.vigor.points.service;
 import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.vigor.points.entity.User;
-import com.vigor.points.repository.UserRepository;
- import com.vigor.points.repository.PointsTransactionRepository;
+import com.vigor.points.repository.PointsTransactionRepository;
+ import com.vigor.points.repository.UserRepository;
 
 @Service
 public class UserService {
@@ -49,12 +50,27 @@ public class UserService {
 }
 
 public User updateUser(Long id, User updatedUser) {
+
     User user = userRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("User not found"));
 
-    user.setName(updatedUser.getName());
-    user.setEmail(updatedUser.getEmail());
-    user.setDepartment(updatedUser.getDepartment());
+    // update only if provided
+    if (updatedUser.getName() != null) {
+        user.setName(updatedUser.getName());
+    }
+
+    if (updatedUser.getEmail() != null) {
+        user.setEmail(updatedUser.getEmail());
+    }
+
+    if (updatedUser.getDepartment() != null) {
+        user.setDepartment(updatedUser.getDepartment());
+    }
+
+    // ✅ password update
+    if (updatedUser.getPassword() != null && !updatedUser.getPassword().isEmpty()) {
+        user.setPassword(updatedUser.getPassword()); // ⚠️ hash if using security
+    }
 
     return userRepository.save(user);
 }
