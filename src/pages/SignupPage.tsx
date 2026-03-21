@@ -8,7 +8,7 @@ import { Crown, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const DEPARTMENTS = ["Management", "Marketing","Sales","Finance"];
+const DEPARTMENTS = ["Office","Sales","Production"];
 
 const SignupPage = () => {
 
