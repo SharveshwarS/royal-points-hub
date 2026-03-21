@@ -98,7 +98,7 @@ const SignupPage = () => {
           </div>
 
           <h1 className="text-2xl font-semibold text-foreground">
-            Royal Points Hub
+            RTPL Rewards
           </h1>
 
           <p className="text-muted-foreground mt-1 text-sm">

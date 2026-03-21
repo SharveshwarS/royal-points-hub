@@ -103,12 +103,12 @@ const LoginPage = () => {
 
         <div className="text-center mb-8">
 
-          <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-primary mb-4">
-            <Crown className="w-7 h-7 text-primary-foreground" />
-          </div>
+          <div className="inline-flex items-center justify-center mb-4">
+  <img src="/images/title.png" alt="RTPL Rewards" className="w-20 h-20 object-contain" />
+</div>
 
           <h1 className="text-2xl font-semibold text-foreground">
-            Royal Points Hub
+            RTPL Rewards
           </h1>
 
           <p className="text-muted-foreground mt-1 text-sm">
