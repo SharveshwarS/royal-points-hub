@@ -25,6 +25,8 @@ const AdminPoints = () => {
 
   const { user } = useAuth();
   const { toast } = useToast();
+  const [positiveReason, setPositiveReason] = useState("");
+  const [negativeReason, setNegativeReason] = useState("");
 
   const [employees, setEmployees] = useState<any[]>([]);
   const [history, setHistory] = useState<PointEntry[]>([]);
@@ -184,6 +186,8 @@ const loadHistory = async (userId: number) => {
       setPointsAdded("");
       setPointsRemoved("");
       setEvent("");
+      setPositiveReason("");  // add this
+      setNegativeReason("");  // add this
 
     } catch (error) {
 
@@ -197,6 +201,29 @@ const loadHistory = async (userId: number) => {
 
     setConfirmOpen(false);
   };
+
+  const POSITIVE_POINTS: Record<string, number> = {
+  "client acquisition-new": 1,
+  "New high value order": 2,
+  "Monthly performance -very good": 1,
+  "monthly performance- outstanding": 2,
+  "Good housekeeping-factory": 1,
+  "Good filing/documentation": 1,
+  "Special Mention": 3,
+};
+
+const NEGATIVE_POINTS: Record<string, number> = {
+  "Routine Late attendance": 1,
+  "Unauthorised absence": 2,
+  "Irregular uniform": 1,
+  "Refusal of work alloted": 2,
+  "Impolite behaviour": 1,
+  "Negligence of duty": 2,
+  "Slow response": 1,
+  "Damage to mold/machines": 2,
+  "Rejection of tyres": 2,
+  "Special Mention": 3,
+};
 
   /* ---------------- UI ---------------- */
 
@@ -255,14 +282,76 @@ const loadHistory = async (userId: number) => {
               />
             </div>
 
-            <div className="space-y-2 md:col-span-2">
-              <Label>Reason</Label>
-              <Input
-                value={event}
-                onChange={(e) => setEvent(e.target.value)}
-                placeholder="e.g. Quarterly bonus"
-              />
-            </div>
+            <div className="space-y-2">
+  <Label>Positive Reason</Label>
+  <Select
+    value={pointsAdded && event ? event : ""}
+    onValueChange={(value) => {
+  setPositiveReason(value);
+  setNegativeReason("");
+  setPointsRemoved("");
+  setPointsAdded(String(POSITIVE_POINTS[value] ?? ""));
+  setEvent(value === "Special Mention" ? "" : value);
+}}
+  >
+    <SelectTrigger>
+      <SelectValue placeholder="Select positive reason" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="client acquisition-new">client acquisition-new</SelectItem>
+      <SelectItem value="New high value order">New high value order</SelectItem>
+      <SelectItem value="Monthly performance -very good">Monthly performance -very good</SelectItem>
+      <SelectItem value="monthly performance- outstanding">monthly performance- outstanding</SelectItem>
+      <SelectItem value="Good housekeeping-factory">Good housekeeping-factory</SelectItem>
+      <SelectItem value="Good filing/documentation">Good filing/documentation</SelectItem>
+      <SelectItem value="Special Mention"> Special Mention</SelectItem>
+    </SelectContent>
+  </Select>
+  {positiveReason === "Special Mention" && (
+    <Input
+      value={event}
+      onChange={(e) => setEvent(e.target.value)}
+      placeholder="Enter custom positive reason..."
+    />
+  )}
+</div>
+
+<div className="space-y-2">
+  <Label>Negative Reason</Label>
+  <Select
+    value={pointsRemoved && event ? event : ""}
+    onValueChange={(value) => {
+  setNegativeReason(value);
+  setPositiveReason("");
+  setPointsAdded("");
+  setPointsRemoved(String(NEGATIVE_POINTS[value] ?? ""));
+  setEvent(value === "Special Mention" ? "" : value);
+}}
+  >
+    <SelectTrigger>
+      <SelectValue placeholder="Select negative reason" />
+    </SelectTrigger>
+    <SelectContent>
+      <SelectItem value="Routine Late attendance">Routine Late attendance</SelectItem>
+      <SelectItem value="Unauthorised absence">Unauthorised absence</SelectItem>
+      <SelectItem value="Irregular uniform">Irregular uniform</SelectItem>
+      <SelectItem value="Refusal of work alloted">Refusal of work alloted</SelectItem>
+      <SelectItem value="Impolite behaviour">Impolite behaviour</SelectItem>
+      <SelectItem value="Negligence of duty">Negligence of duty</SelectItem>
+      <SelectItem value="Slow response">Slow response</SelectItem>
+      <SelectItem value="Damage to mold/machines">Damage to mold/machines</SelectItem>
+      <SelectItem value="Rejection of tyres">Rejection of tyres</SelectItem>
+      <SelectItem value="Special Mention"> Special Mention</SelectItem>
+    </SelectContent>
+  </Select>
+  {negativeReason === "Special Mention" && (
+    <Input
+      value={event}
+      onChange={(e) => setEvent(e.target.value)}
+      placeholder="Enter custom negative reason..."
+    />
+  )}
+</div>
 
             <div className="space-y-2">
               <Label>Pointed By</Label>
@@ -272,26 +361,30 @@ const loadHistory = async (userId: number) => {
             <div />
 
             <div className="space-y-2">
-              <Label>Points to Add</Label>
-              <Input
-                type="number"
-                min="0"
-                value={pointsAdded}
-                onChange={(e) => setPointsAdded(e.target.value)}
-                placeholder="0"
-              />
-            </div>
+  <Label>Points to Add</Label>
+  <Input
+    type="number"
+    min="0"
+    value={pointsAdded}
+    onChange={(e) => setPointsAdded(e.target.value)}
+    placeholder="0"
+    readOnly={positiveReason !== "" && positiveReason !== "Special Mention"}
+    className={positiveReason !== "" && positiveReason !== "Special Mention" ? "bg-muted cursor-not-allowed" : ""}
+  />
+</div>
 
             <div className="space-y-2">
-              <Label>Points to Remove</Label>
-              <Input
-                type="number"
-                min="0"
-                value={pointsRemoved}
-                onChange={(e) => setPointsRemoved(e.target.value)}
-                placeholder="0"
-              />
-            </div>
+  <Label>Points to Remove</Label>
+  <Input
+    type="number"
+    min="0"
+    value={pointsRemoved}
+    onChange={(e) => setPointsRemoved(e.target.value)}
+    placeholder="0"
+    readOnly={negativeReason !== "" && negativeReason !== "Special Mention"}
+    className={negativeReason !== "" && negativeReason !== "Special Mention" ? "bg-muted cursor-not-allowed" : ""}
+  />
+</div>
 
           </div>
 

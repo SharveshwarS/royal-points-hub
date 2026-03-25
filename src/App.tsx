@@ -16,6 +16,8 @@ import AdminPoints from "@/pages/AdminPoints";
 import SupervisorTeam from "@/pages/SupervisorTeam";
 import SupervisorPoints from "@/pages/SupervisorPoints";
 import NotFound from "./pages/NotFound";
+import EmployeeInternalCommunication from "@/pages/EmployeeInternalCommunication";
+import AdminInternalCommunication from "@/pages/AdminInternalCommunication";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +49,7 @@ const AppRoutes = () => (
     {/* Employee & Supervisor dashboard */}
     <Route path="/dashboard" element={<ProtectedRoute permission="view_own_profile"><EmployeeDashboard /></ProtectedRoute>} />
     <Route path="/settings" element={<ProtectedRoute permission="change_password"><EmployeeSettings /></ProtectedRoute>} />
+    <Route path="/employee/communication" element={<EmployeeInternalCommunication />} />
 
     {/* Supervisor */}
     <Route path="/supervisor/team" element={<ProtectedRoute permission="view_department_employees"><SupervisorTeam /></ProtectedRoute>} />
@@ -56,6 +59,7 @@ const AppRoutes = () => (
     <Route path="/admin" element={<ProtectedRoute permission="manage_employees"><AdminDashboard /></ProtectedRoute>} />
     <Route path="/admin/employees" element={<ProtectedRoute permission="manage_employees"><AdminEmployees /></ProtectedRoute>} />
     <Route path="/admin/points" element={<ProtectedRoute permission="manage_points"><AdminPoints /></ProtectedRoute>} />
+    <Route path="/admin/communication" element={<AdminInternalCommunication />} />
 
     <Route path="*" element={<NotFound />} />
   </Routes>

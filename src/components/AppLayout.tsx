@@ -1,7 +1,7 @@
 import { NavLink as RouterNavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { 
-  LayoutDashboard, Users, Award, Settings, LogOut, ChevronLeft, Menu
+  LayoutDashboard, Users, Award, Settings, LogOut, ChevronLeft, Menu,  MessageSquare
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -17,18 +17,21 @@ interface NavItem {
 const navByRole: Record<Role, NavItem[]> = {
   employee: [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
+    { label: "Internal Communication", path: "/employee/communication", icon: MessageSquare },
     { label: "Settings", path: "/settings", icon: Settings },
   ],
   supervisor: [
     { label: "Dashboard", path: "/dashboard", icon: LayoutDashboard },
     { label: "My Team", path: "/supervisor/team", icon: Users },
     { label: "Points", path: "/supervisor/points", icon: Award },
+    { label: "Internal Communication", path: "/employee/communication", icon: MessageSquare },
     { label: "Settings", path: "/settings", icon: Settings },
   ],
   admin: [
     { label: "Dashboard", path: "/admin", icon: LayoutDashboard },
     { label: "Employees", path: "/admin/employees", icon: Users },
     { label: "Points", path: "/admin/points", icon: Award },
+    { label: "Internal Communication", path: "/admin/communication", icon: MessageSquare },
     { label: "Settings", path: "/settings", icon: Settings },
   ],
 };
@@ -48,10 +51,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
   const SidebarContent = () => (
     <>
       <div className="p-4 flex items-center gap-3">
-        <div className="w-8 h-8 rounded-lg bg-sidebar-primary flex items-center justify-center flex-shrink-0">
-          <Crown className="w-4 h-4 text-sidebar-primary-foreground" />
-        </div>
-        {!collapsed && <span className="font-semibold text-sidebar-accent-foreground text-sm">Royal Points Hub</span>}
+        <div className="inline-flex items-center justify-center mb-4">
+  <img src="/images/title.png" alt="RTPL Rewards" className="w-20 h-20 object-contain" />
+</div>
+        {!collapsed && <span className="font-semibold text-sidebar-accent-foreground text-sm">RTPL Rewards</span>}
       </div>
 
       {!collapsed && user && (
@@ -139,7 +142,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
           <button onClick={() => setMobileOpen(true)} className="text-foreground">
             <Menu className="w-5 h-5" />
           </button>
-          <span className="ml-3 font-semibold text-sm">Royal Points Hub</span>
+          <span className="ml-3 font-semibold text-sm">RTPL Rewards</span>
         </header>
 
         <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
