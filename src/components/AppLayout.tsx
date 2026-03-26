@@ -104,9 +104,9 @@ const AppLayout = ({ children }: AppLayoutProps) => {
       </div>
     </>
   );
-
-  return (
-    <div className="min-h-screen flex w-full bg-background">
+return (
+    // 🛑 1. Changed "min-h-screen" to "h-screen" and added "overflow-hidden"
+    <div className="h-screen flex w-full bg-background overflow-hidden">
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-foreground/20 lg:hidden" onClick={() => setMobileOpen(false)} />
       )}
@@ -137,20 +137,23 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         </div>
       </aside>
 
-      <div className="flex-1 flex flex-col min-w-0">
-        <header className="lg:hidden flex items-center h-14 px-4 border-b border-border bg-card">
+      {/* 🛑 2. Added h-full and overflow-hidden to the main content wrapper */}
+      <div className="flex-1 flex flex-col min-w-0 h-full overflow-hidden">
+        <header className="lg:hidden flex items-center h-14 px-4 border-b border-border bg-card shrink-0">
           <button onClick={() => setMobileOpen(true)} className="text-foreground">
             <Menu className="w-5 h-5" />
           </button>
           <span className="ml-3 font-semibold text-sm">RTPL Rewards</span>
         </header>
 
-        <main className="flex-1 p-4 md:p-6 lg:p-8 overflow-auto">
+        {/* 🛑 3. Made main a flex container (flex flex-col min-h-0) so the chat can properly lock into it */}
+        <main className="flex-1 flex flex-col p-4 md:p-6 lg:p-8 overflow-auto min-h-0">
           {children}
         </main>
       </div>
     </div>
   );
 };
+
 
 export default AppLayout;
