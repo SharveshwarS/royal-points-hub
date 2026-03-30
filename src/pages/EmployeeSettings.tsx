@@ -22,7 +22,7 @@ const EmployeeSettings = () => {
 
   try {
 
-    const response = await fetch(`http://localhost:8080/api/auth/update_users/${user.id}`, {
+    const response = await fetch(`https://royal-points-hub-production.up.railway.app/api/auth/update_users/${user.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -91,7 +91,7 @@ const EmployeeSettings = () => {
 
   try {
 
-    const response = await fetch(`http://localhost:8080/api/auth/update_users/${user.id}`, {
+    const response = await fetch(`https://royal-points-hub-production.up.railway.app/api/auth/update_users/${user.id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

@@ -47,7 +47,7 @@ const AdminInternalCommunication = () => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/admin/users");
+        const res = await fetch("https://royal-points-hub-production.up.railway.app/api/admin/users");
         if (!res.ok) return;
         const data = await res.json();
 
@@ -69,7 +69,7 @@ const AdminInternalCommunication = () => {
     const fetchMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8080/api/chat/conversation?user1=${ADMIN_ID}&user2=${selectedUser.id}`
+          `https://royal-points-hub-production.up.railway.app/api/chat/conversation?user1=${ADMIN_ID}&user2=${selectedUser.id}`
         );
         if (!res.ok) return;
         const data = await res.json();
@@ -110,7 +110,7 @@ const AdminInternalCommunication = () => {
     if (!input.trim() || !selectedUser) return;
 
     try {
-      const res = await fetch("http://localhost:8080/api/chat/send", {
+      const res = await fetch("https://royal-points-hub-production.up.railway.app/api/chat/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

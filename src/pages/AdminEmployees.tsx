@@ -36,7 +36,7 @@ const AdminEmployees = () => {
 
 const fetchUsers = async () => {
   try {
-    const res = await fetch("http://localhost:8080/api/admin/users");
+    const res = await fetch("https://royal-points-hub-production.up.railway.app/api/admin/users");
     if (!res.ok) throw new Error("API error");
 
     const users = await res.json();
@@ -105,7 +105,7 @@ const fetchUsers = async () => {
     if (isNew) {
       // OPTIONAL: if you want backend create API
     } else if (selected) {
-      await fetch(`http://localhost:8080/api/auth/update_users/${selected.id}`, {
+      await fetch(`https://royal-points-hub-production.up.railway.app/api/auth/update_users/${selected.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -149,10 +149,10 @@ const fetchUsers = async () => {
   if (!selected) return;
 
   try {
-    await fetch(`http://localhost:8080/api/auth/delete_users/${selected.id}`, {
+    await fetch(`https://royal-points-hub-production.up.railway.app/api/auth/delete_users/${selected.id}`, {
       method: "DELETE"
     });
-    await fetch(`http://localhost:8080/api/admin/userTra/${selected.id}`, {
+    await fetch(`https://royal-points-hub-production.up.railway.app/api/admin/userTra/${selected.id}`, {
       method: "DELETE"
     });
 

@@ -17,14 +17,14 @@ const [transactions, setTransactions] = useState([]);
 const fetchDashboardData = async () => {
   try {
     // 1. Fetch users
-    const userRes = await fetch("http://localhost:8080/api/admin/users");
+    const userRes = await fetch("https://royal-points-hub-production.up.railway.app/api/admin/users");
     const usersData = await userRes.json();
 
     const usersArray = Array.isArray(usersData) ? usersData : [usersData];
     setEmployees(usersArray);
 
     // 2. Fetch transactions (you need this API)
-    const txRes = await fetch("http://localhost:8080/api/admin/transactions");
+    const txRes = await fetch("https://royal-points-hub-production.up.railway.app/api/admin/transactions");
     const txData = await txRes.json();
 
     setTransactions(txData);

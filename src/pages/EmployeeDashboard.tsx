@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import PointsHistoryTable from "@/components/PointsHistoryTable";
 import { PointEntry } from "@/types";
 
-const API = "http://localhost:8080/api/admin";
+const API = "https://royal-points-hub-production.up.railway.app/api/admin";
 
 const EmployeeDashboard = () => {
   const { user } = useAuth();

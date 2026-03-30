@@ -19,7 +19,7 @@ import {
 import PointsHistoryTable from "@/components/PointsHistoryTable";
 import { useToast } from "@/hooks/use-toast";
 
-const API = "http://localhost:8080/api/admin";
+const API = "https://royal-points-hub-production.up.railway.app/api/admin";
 
 const AdminPoints = () => {
 
