@@ -211,7 +211,7 @@ const sendMessage = async () => {
                 <p className="text-gray-500 text-center mt-10 bg-gray-100 border border-gray-200 px-4 py-1 rounded-full self-center text-xs">
                   Say hi to {selectedUser.name}
                 </p>
-              ) : (
+              ) : ( 
                 messages.map((msg, index) => {
                   const isSent = Number(msg.sender.id) === Number(employeeId);
                   const prevMsg = index > 0 ? messages[index - 1] : null;
